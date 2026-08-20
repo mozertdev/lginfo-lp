@@ -25,3 +25,39 @@ A modern, fast, and fully responsive landing page built for **LG Manutenção & 
 - **Simple Icons**
 
 ---
+
+## 🚀 Getting Started & Running the Project
+
+Follow these steps to set up and run the project locally on your machine.
+
+### Prerequisites
+
+Make sure you have **Node.js** installed on your computer.
+
+### 1. Installation
+
+Clone the repository and install the project dependencies (Tailwind CLI):
+
+```bash
+git clone https://github.com/mozertdev/lginfo-lp.git
+```
+
+Navigate to the project directory
+
+```bash
+cd lginfo-lp
+```
+
+Install dependencies
+```bash
+npm install
+```
+
+### 2. Running for Development
+
+To run Tailwind CSS in watch mode so that your styles recompile automatically as you make changes to HTML files:
+
+```bash
+npm run dev
+```
+(Note: Ensure `package.json` has a watch script configured like `npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch`).
