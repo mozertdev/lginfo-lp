@@ -1,7 +1,7 @@
 /**
  * @file Main Client-Side Script
  * @description Handles UI interactions, mobile navigation, theme switching, and the gallery lightbox modal.
- * @version 1.0.1
+ * @version 1.0.2
  */
 
 // Initialize Lucide icons on initial load

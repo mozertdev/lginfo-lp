@@ -6,6 +6,7 @@
     <!-- ================================================= -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
 
     <!-- ================================================= -->
     <!-- Primary SEO & Search Engine Optimization          -->
@@ -19,9 +20,10 @@
     <!-- ================================================= -->
     <!-- Open Graph Protocol / Social Media Meta Tags      -->
     <!-- ================================================= -->
-    <meta property="meta:title" content="Luiz Gustavo Manutenção & Informática | Assistência Técnica">
-    <meta property="meta:description" content="Assistência técnica especializada em computadores e notebooks em Sobradinho - DF. Orçamento transparente e honesto.">
-    <meta property="meta:type" content="website">
+    <meta property="og:title" content="Luiz Gustavo Manutenção & Informática | Assistência Técnica">
+    <meta property="og:description" content="Assistência técnica especializada em computadores e notebooks em Sobradinho - DF. Orçamento transparente e honesto.">
+    <meta property="og:type" content="website">
+    <!-- <meta property="og:url" content="https://www.urldefinitivadosite.com.br/"> -->
     <!-- <meta property="og:image" content="./images/favicon.svg"> -->
 
     <!-- ================================================= -->
@@ -46,20 +48,20 @@
     -->
     <script>
         (function() {
-          try {
-              const savedTheme = localStorage.getItem('theme');
-              const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            try {
+                const savedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-              if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-                document.documentElement.classList.add('dark');
-              } else {
-                document.documentElement.classList.remove('dark');
-              }
-          } catch (e) {
-              if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.documentElement.classList.add('dark');
-              }
-          }
+                if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            } catch (e) {
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark');
+                }
+            }
         })();
     </script>
 </head>

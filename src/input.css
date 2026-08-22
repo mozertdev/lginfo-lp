@@ -1,7 +1,7 @@
 /**
  * @file Main Tailwind Input Stylesheet
  * @description Defines custom layers, animations, and utility classes for LG Manutenção & Informática.
- * @version 1.0.1
+ * @version 1.0.2
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -9,6 +9,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  /**
+   * Instructs browsers (especially mobile engines like Samsung Internet)
+   * that the document natively supports both light and dark modes,
+   * preventing unwanted automatic color inversion or saturation filters.
+   */
+  html {
+    color-scheme: light dark;
+  }
+}
 
 @layer utilities {
   /* ==========================================================================
