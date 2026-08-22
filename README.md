@@ -2,13 +2,14 @@
 
 A modern, fast, and fully responsive landing page built for **LG Manutenção & Informática**, a professional computer repair and IT technical support business based in Sobradinho, Brasília - DF, Brazil.
 
-
 ---
 
 ## Features
 
-- **Modern UI / Dark Theme:** Crafted using Tailwind CSS with a clean slate-900/950 color palette, offering a professional and high-tech feel.
-- **Fully Responsive:** Optimized for mobile devices, tablets, and desktop screens.
+- **Modern UI / Light & Dark Theme:** Crafted using Tailwind CSS with a clean slate color palette, supporting both light and dark modes with local storage persistence and OS preference detection.
+- **Fully Responsive:** Optimized for mobile devices, tablets, and desktop screens, rigorously tested on older devices (including 10+ year old smartphones).
+- **Robust Theme Management:** Early-initialization script in the document head to prevent FOUC (Flash of Unstyled Content) and ensure seamless compatibility across older or restricted mobile browsers (such as Samsung Internet).
+- **Advanced Mobile UX:** Intercepts the browser's back button history state when image lightboxes are open, allowing users to close modals natively instead of accidentally leaving the page.
 - **Direct WhatsApp Integration:** Quick call-to-action buttons with pre-filled messages and a floating WhatsApp widget for instant customer scheduling.
 - **Real Social Proof:** Showcases verified customer reviews pulled directly from Google Business Profile.
 - **Interactive Map:** Integrated Google Maps embed with exact location and Plus Code details.
@@ -18,9 +19,9 @@ A modern, fast, and fully responsive landing page built for **LG Manutenção & 
 
 ## Tech Stack
 
-- **HTML5** (Semantic markup)
+- **HTML5** (Semantic markup & History API)
 - **Tailwind CSS v3** (Utility-first CSS framework)
-- **JavaScript (Vanilla)** (Interactive elements and icon rendering)
+- **JavaScript (Vanilla)** (Interactive elements, modals, and OS theme matching via `matchMedia`)
 - **Lucide Icons**
 - **Simple Icons**
 

@@ -1,3 +1,9 @@
+/**
+ * @file Main Tailwind Input Stylesheet
+ * @description Defines custom layers, animations, and utility classes for LG Manutenção & Informática.
+ * @version 1.0.1
+ */
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -5,7 +11,11 @@
 @tailwind utilities;
 
 @layer utilities {
-  /* Initial state */
+  /* ==========================================================================
+     Scroll Reveal Animations
+     ========================================================================== */
+
+  /* Initial hidden state for scroll reveal elements */
   .reveal-scroll {
     opacity: 0;
     transform: translateY(30px);
@@ -13,9 +23,22 @@
     will-change: opacity, transform;
   }
 
-  /* Active state */
+  /* Active visible state for scroll reveal elements */
   .reveal-scroll.active {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  /* ==========================================================================
+     Theme Transition Utilities
+     ========================================================================== */
+
+  /**
+   * Smooth color and background transition for theme switching.
+   * Apply this class specifically to interactive components (cards, buttons, navbars)
+   * rather than the root html/body to prevent initial page-load flashing.
+   */
+  .theme-transition {
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, color 0.3s ease-in-out;
   }
 }

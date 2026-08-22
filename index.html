@@ -38,8 +38,30 @@
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!--
+        Early Theme Initializer - Prevents FOUC (Flash of Unstyled Content) and
+        applies the theme synchronously before DOM rendering, supporting OS
+        preferences and handling restricted browser environments (such as Samsung
+        Internet WebViews).
+    -->
+    <script>
+        (function() {
+          try {
+              const savedTheme = localStorage.getItem('theme');
+              const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-
+              if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+              } else {
+                document.documentElement.classList.remove('dark');
+              }
+          } catch (e) {
+              if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+              }
+          }
+        })();
+    </script>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 font-sans antialiased overflow-x-hidden selection:bg-blue-500 selection:text-white transition-colors duration-300">
 
