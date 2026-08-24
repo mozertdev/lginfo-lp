@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] - 2026-08-23
+
+### Added
+- Integrated a helpful, user-friendly notification banner in the Hero Section tailored for users browsing via Samsung Internet, advising them on correct color and theme settings ("Locais com luz").
+- Added conditional session storage logic to dismiss the Samsung Internet notice gracefully and prevent repeat prompts during the same visit.
+
+### Fixed
+- Fixed an animation synchronization bug on the brand logo click event by utilizing the native `scrollend` API, ensuring smooth scrolling to the top completes entirely before triggering a clean page reload.
+
+---
+
 ## [1.0.2] - 2026-08-22
 
 ### Fixed

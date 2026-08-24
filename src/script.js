@@ -1,9 +1,3 @@
-/**
- * @file Main Client-Side Script
- * @description Handles UI interactions, mobile navigation, theme switching, and the gallery lightbox modal.
- * @version 1.0.2
- */
-
 // Initialize Lucide icons on initial load
 lucide.createIcons();
 
@@ -117,16 +111,37 @@ mobileLinks.forEach(link => {
 });
 
 /**
- * Brand Logo Interaction: Smooth scrolls to the top of the viewport
- * followed by a controlled page reload to clear application state.
+ * Handles the brand logo interaction. Smoothly scrolls the viewport to the top
+ * and cleanly reloads the page once the scroll animation finishes completely.
+ *
+ * @function handleBrandLogoClick
+ * @param {MouseEvent} event - The click event object.
+ * @returns {void}
  */
 if (brandLogo) {
     brandLogo.addEventListener('click', (event) => {
         event.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setTimeout(() => {
+
+        // Initiate smooth viewport translation to top coordinates
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+
+        /**
+         * Listens for the native scroll termination event, cleans up the listener,
+         * and triggers a full page refresh to reset DOM states and IntersectionObservers.
+         *
+         * @function handleScrollEnd
+         * @returns {void}
+         */
+        const handleScrollEnd = () => {
+            window.removeEventListener('scrollend', handleScrollEnd);
             window.location.reload();
-        }, 400);
+        };
+
+        // Attach native scrollend event listener for precise synchronization
+        window.addEventListener('scrollend', handleScrollEnd);
     });
 }
 
@@ -231,5 +246,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.reveal-scroll').forEach(element => {
         observer.observe(element);
+    });
+});
+
+/**
+ * Detects Samsung Internet and shows a helpful tip if system dark mode is active,
+ * guiding the user to turn off the browser's aggressive forced inversion.
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    const notice = document.getElementById('samsung-notice');
+    const closeBtn = document.getElementById('close-samsung-notice');
+
+    if (!notice || !closeBtn) return;
+
+    const isSamsungBrowser = /SamsungBrowser/.test(navigator.userAgent);
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const hasClosedNotice = sessionStorage.getItem('samsung_notice_dismissed');
+
+    // Show only if it's Samsung browser, dark mode is on, and user hasn't dismissed it yet
+    if (isSamsungBrowser && isDarkMode && !hasClosedNotice) {
+        // Small delay so it doesn't pop up instantly on page load
+        setTimeout(() => {
+            notice.classList.remove('hidden');
+        }, 1500);
+    }
+
+    // Close and remember dismissal for the current session
+    closeBtn.addEventListener('click', () => {
+        notice.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => {
+            notice.remove();
+        }, 300);
+        sessionStorage.setItem('samsung_notice_dismissed', 'true');
     });
 });
