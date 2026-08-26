@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
 
     <!-- ================================================= -->
     <!-- Primary SEO & Search Engine Optimization          -->
@@ -132,22 +133,76 @@
     <!-- Hero Section                                      -->
     <!-- ================================================= -->
     <section id="hero" class="pt-32 pb-20 md:pt-44 md:pb-32 relative overflow-hidden">
-        <!-- Samsung Internet Dark Mode Notice (Top Banner) -->
-        <div id="samsung-notice" class="hidden fixed top-4 left-4 right-4 z-50 mx-auto max-w-md rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-900 backdrop-blur-md dark:border-amber-400/30 dark:bg-amber-950/90 dark:text-amber-200 shadow-xl transition-all duration-300">
-            <div class="flex items-start justify-between gap-3">
-                <div class="flex-1">
-                    <p class="font-semibold mb-1 flex items-center gap-1.5">
-                        <span>💡</span> Dica de visualização:
-                    </p>
-                    <p class="text-xs opacity-95 leading-relaxed">
-                        Ei, está usando o navegador Samsung Internet? Para ter uma melhor experiência de cores e temas no nosso site, toque no menu do navegador e mude para a opção <strong>"Locais com luz"</strong>.
-                    </p>
+    <!-- Universal Friendly Viewing Tip Notice with Interactive Instructions -->
+    <div id="forced-theme-notice" class="hidden fixed top-4 left-4 right-4 z-50 mx-auto max-w-md rounded-2xl border border-zinc-200 bg-white/95 p-4 text-sm text-zinc-800 shadow-2xl backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/95 dark:text-zinc-100 transition-all duration-300">
+        <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+                <p class="font-semibold mb-1 flex items-center gap-1.5 text-zinc-900 dark:text-white">
+                    <span>✨</span> <span>Dica de visualização:</span>
+                </p>
+                <p class="text-xs opacity-90 leading-relaxed mb-3">
+                    Para aproveitar nossas cores e temas da melhor forma, recomendamos desativar o <strong>modo escuro forçado</strong> do seu navegador. Se a experiência já está agradável na sua tela, apenas feche esta mensagem. Caso contrário, escolha seu navegador abaixo para ver como ajustar:
+                </p>
+
+                <!-- Browser Selector -->
+                <div class="flex flex-wrap gap-1.5 mb-3 text-[11px]">
+                    <button type="button" data-target="instruction-chrome" class="browser-tab-btn rounded-md bg-zinc-100 px-2.5 py-1 font-medium hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors">
+                        Chrome
+                    </button>
+                    <button type="button" data-target="instruction-firefox" class="browser-tab-btn rounded-md bg-zinc-100 px-2.5 py-1 font-medium hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors">
+                        Firefox
+                    </button>
+                    <button type="button" data-target="instruction-safari" class="browser-tab-btn rounded-md bg-zinc-100 px-2.5 py-1 font-medium hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors">
+                        Safari
+                    </button>
+                    <button type="button" data-target="instruction-samsung" class="browser-tab-btn rounded-md bg-zinc-100 px-2.5 py-1 font-medium hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors">
+                        Samsung Internet
+                    </button>
                 </div>
-                <button id="close-samsung-notice" class="rounded-lg p-1 hover:bg-amber-500/20 transition-colors text-amber-900 dark:text-amber-200" aria-label="Fechar aviso">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+
+                <!-- Dynamic Instructions Area -->
+                <div id="instructions-container" class="hidden rounded-xl bg-zinc-50 p-3 text-[11px] leading-relaxed text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-300 border border-zinc-100 dark:border-zinc-800/80">
+
+                    <!-- Chrome Instructions -->
+                    <div id="instruction-chrome" class="browser-instruction hidden space-y-1">
+                        <p class="font-semibold text-zinc-800 dark:text-zinc-200">Google Chrome:</p>
+                        <p>1. Digite <code class="bg-zinc-200 dark:bg-zinc-700 px-1 rounded">chrome://flags/#enable-force-dark</code> na barra de endereços e aperte Enter.</p>
+                        <p>2. Procure por <strong>Force Dark Mode for Web Contents</strong>.</p>
+                        <p>3. Mude de <em>Enabled</em> para <strong>Default</strong> ou <strong>Disabled</strong>.</p>
+                        <p>4. Toque no botão azul <strong>Relaunch</strong> (ou Reiniciar) no rodapé.</p>
+                    </div>
+
+                    <!-- Firefox Instructions -->
+                    <div id="instruction-firefox" class="browser-instruction hidden space-y-1">
+                        <p class="font-semibold text-zinc-800 dark:text-zinc-200">Mozilla Firefox:</p>
+                        <p>1. Digite <code class="bg-zinc-200 dark:bg-zinc-700 px-1 rounded">about:config</code> na barra de endereços e aceite o aviso de risco.</p>
+                        <p>2. Certifique-se de que a preferência <code class="bg-zinc-200 dark:bg-zinc-700 px-1 rounded">ui.systemUsesDarkTheme</code> esteja ajustada para <strong>0</strong> (modo claro) ou <strong>2</strong> (sem preferência).</p>
+                    </div>
+
+                    <!-- Safari Instructions -->
+                    <div id="instruction-safari" class="browser-instruction hidden space-y-1">
+                        <p class="font-semibold text-zinc-800 dark:text-zinc-200">Safari (iOS / iPadOS):</p>
+                        <p>1. Toque no ícone de Aprimoramento de Página (as letras <strong>"aA"</strong>) na barra de endereços.</p>
+                        <p>2. Se a opção <strong>"Ocultar Tema Escuro"</strong> ou <strong>"Usar Aparência Clara"</strong> estiver ativa para o site, toque nela.</p>
+                        <p>3. Verifique também em <strong>"Ajustes do Site"</strong> se há regras de inversão ativas.</p>
+                    </div>
+
+                    <!-- Samsung Internet Instructions -->
+                    <div id="instruction-samsung" class="browser-instruction hidden space-y-1">
+                        <p class="font-semibold text-zinc-800 dark:text-zinc-200">Samsung Internet:</p>
+                        <p>1. Toque no ícone de menu (três barras) no canto inferior da tela.</p>
+                        <p>2. Acesse a opção <strong>Modo Noturno</strong>.</p>
+                        <p>3. Mude para a opção <strong>"Locais com luz"</strong> ou desative-o por completo.</p>
+                    </div>
+
+                </div>
             </div>
+
+            <button id="close-forced-notice" class="rounded-lg p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 transition-colors shrink-0" aria-label="Fechar aviso">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
         </div>
+    </div>
 
         <!-- Animated Background Glow Effect -->
         <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-blue-500/10 dark:bg-blue-600/10 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
@@ -330,7 +385,7 @@
     </section>
 
     <!-- ================================================= -->
-    <!-- Gallery / Portfolio Section (Masonry Grid)        -->
+    <!-- Gallery / Portfolio Section                       -->
     <!-- ================================================= -->
     <section id="galeria" class="py-20 bg-slate-100 dark:bg-slate-950 relative border-t border-slate-300 dark:border-slate-800/60">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -351,54 +406,66 @@
                 </p>
             </div>
 
-            <!-- Masonry Grid Layout -->
-            <div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+            <!-- Grid Layout -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
                 <!-- Gallery Item 1: Notebook Maintenance -->
-                <div class="break-inside-avoid group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl cursor-pointer gallery-item reveal-scroll">
-                    <img src="./images/manutencao-notebook-3.jpg" alt="Manutenção de Notebook" class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105">
+                <div class="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl cursor-pointer gallery-item reveal-scroll">
+                    <div class="aspect-[4/3] w-full overflow-hidden">
+                        <img src="./images/manutencao-notebook-3.jpg" alt="Manutenção de Notebook" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
                     <!-- Visible on Mobile, Hover only on Desktop -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6 pointer-events-none">
                         <span class="text-white font-medium text-sm">Limpeza interna e troca de pasta térmica</span>
                     </div>
                 </div>
 
                 <!-- Gallery Item 2: Gamer PC Cable Management -->
-                <div class="break-inside-avoid group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl cursor-pointer gallery-item reveal-scroll">
-                    <img src="./images/upgrade-pc-3.jpg" alt="Organização de Cabos PC Gamer" class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                <div class="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl cursor-pointer gallery-item reveal-scroll">
+                    <div class="aspect-[4/3] w-full overflow-hidden">
+                        <img src="./images/upgrade-pc-3.jpg" alt="Organização de Cabos PC Gamer" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6 pointer-events-none">
                         <span class="text-white font-medium text-sm">Cable management em PC Gamer</span>
                     </div>
                 </div>
 
                 <!-- Gallery Item 3: Advanced Motherboard Repair -->
-                <div class="break-inside-avoid group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl cursor-pointer gallery-item reveal-scroll">
-                    <img src="./images/manutencao-placa-1.jpg" alt="Reparo em Placa" class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                <div class="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl cursor-pointer gallery-item reveal-scroll">
+                    <div class="aspect-[4/3] w-full overflow-hidden">
+                        <img src="./images/manutencao-placa-1.jpg" alt="Reparo em Placa" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6 pointer-events-none">
                         <span class="text-white font-medium text-sm">Reparo avançado em eletrônica</span>
                     </div>
                 </div>
 
                 <!-- Gallery Item 4: Deep PC Cleaning -->
-                <div class="break-inside-avoid group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl cursor-pointer gallery-item reveal-scroll">
-                    <img src="./images/limpeza-pc-3.jpg" alt="Limpeza de PC" class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                <div class="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl cursor-pointer gallery-item reveal-scroll">
+                    <div class="aspect-[4/3] w-full overflow-hidden">
+                        <img src="./images/limpeza-pc-3.jpg" alt="Limpeza de PC" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6 pointer-events-none">
                         <span class="text-white font-medium text-sm">Limpeza profunda em PC</span>
                     </div>
                 </div>
 
                 <!-- Gallery Item 5: Software & Formatting -->
-                <div class="break-inside-avoid group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl cursor-pointer gallery-item reveal-scroll">
-                    <img src="./images/notebook-2.jpg" alt="Formatação e instalação de software" class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                <div class="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl cursor-pointer gallery-item reveal-scroll">
+                    <div class="aspect-[4/3] w-full overflow-hidden">
+                        <img src="./images/notebook-2.jpg" alt="Formatação e instalação de software" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6 pointer-events-none">
                         <span class="text-white font-medium text-sm">Formatação e instalação de programas</span>
                     </div>
                 </div>
 
                 <!-- Gallery Item 6: Notebook Overhaul -->
-                <div class="break-inside-avoid group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl cursor-pointer gallery-item reveal-scroll">
-                    <img src="./images/manutencao-notebook-1.jpg" alt="Manutenção e revisão de Notebook" class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                <div class="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl cursor-pointer gallery-item reveal-scroll">
+                    <div class="aspect-[4/3] w-full overflow-hidden">
+                        <img src="./images/manutencao-notebook-1.jpg" alt="Manutenção e revisão de Notebook" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6 pointer-events-none">
                         <span class="text-white font-medium text-sm">Manutenção e revisão de Notebook</span>
                     </div>
                 </div>

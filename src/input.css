@@ -4,15 +4,42 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
-  /**
-   * Instructs browsers (especially mobile engines like Samsung Internet)
-   * that the document natively supports both light and dark modes,
-   * preventing unwanted automatic color inversion or saturation filters.
-   */
-  html {
-    color-scheme: light dark;
-  }
+    /* ==========================================================================
+       Anti-Inversion & Color Schema Directives
+       Instructs all modern browser engines (Chromium, Safari, Firefox, Samsung)
+       to respect native developer-defined themes and disable forced color schemes.
+       ========================================================================== */
+
+    :root {
+    /* Standard color-scheme configuration */
+        color-scheme: light dark;
+    }
+
+    /* When light mode is active on the html root element */
+    html:not(.dark) {
+        color-scheme: light;
+    }
+
+    /* When dark mode is active on the html root element */
+    html.dark {
+        color-scheme: dark;
+    }
+
+    /* Global element protection against automated browser color shifting */
+    html, body {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+
+    /*
+    Disable forced color-adjust heuristics on media elements, SVGs, and pictures
+    to prevent aggressive browser color inversion engines from breaking assets.
+    */
+    img, video, svg, picture, canvas {
+        color-scheme: normal;
+    }
 }
 
 @layer utilities {

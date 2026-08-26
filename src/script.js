@@ -2,36 +2,46 @@
 lucide.createIcons();
 
 /* ==========================================================================
-   Theme Switcher (Dark/Light Mode)
+   Theme Switcher & User Guidance for Forced Browser Dark Modes
    ========================================================================== */
 
 const themeToggleDesktop = document.getElementById('theme-toggle-desktop');
 const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+const forcedNotice = document.getElementById('forced-theme-notice');
+const closeForcedNoticeBtn = document.getElementById('close-forced-notice');
 
 /**
- * Applies the selected theme to the document root and safely persists the preference.
- * Synchronizes Lucide icons to reflect the current state.
+ * Applies the selected theme to the document root, persists preference,
+ * and triggers a helpful warning banner once per session if forced browser
+ * color-shifting might be affecting the view.
  *
  * @function setTheme
  * @param {'dark'|'light'} theme - The target theme to apply.
  * @returns {void}
  */
 function setTheme(theme) {
-    if (theme === 'dark') {
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.classList.remove('dark');
-    }
+  if (theme === 'dark') {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
 
-    // Safely attempt storage persistence, handling restricted browser modes (e.g., Samsung Internet private)
-    try {
-        localStorage.setItem('theme', theme);
-    } catch (error) {
-        console.warn('Theme preference could not be saved to localStorage:', error);
-    }
+  try {
+    localStorage.setItem('theme', theme);
+  } catch (error) {
+    console.warn('Theme preference could not be saved to localStorage:', error);
+  }
 
-    // Refresh icons to adapt to the new theme context if necessary
-    lucide.createIcons();
+  lucide.createIcons();
+
+  // Trigger the guidance notice when the user explicitly interacts with the theme switch,
+  // ensuring it only shows once per session.
+  const hasSeenNotice = sessionStorage.getItem('forced_theme_notice_shown');
+  if (forcedNotice && !hasSeenNotice) {
+    setTimeout(() => {
+      forcedNotice.classList.remove('hidden');
+    }, 400); // Small delay to let the theme transition finish smoothly
+  }
 }
 
 /**
@@ -41,18 +51,59 @@ function setTheme(theme) {
  * @returns {void}
  */
 function toggleTheme() {
-    const isDark = document.documentElement.classList.contains('dark');
-    setTheme(isDark ? 'light' : 'dark');
+  const isDark = document.documentElement.classList.contains('dark');
+  setTheme(isDark ? 'light' : 'dark');
 }
 
-// Bind theme toggle event listeners with robust null-checking
+// Bind theme toggle event listeners
 if (themeToggleDesktop) {
-    themeToggleDesktop.addEventListener('click', toggleTheme);
+  themeToggleDesktop.addEventListener('click', toggleTheme);
 }
 
 if (themeToggleMobile) {
-    themeToggleMobile.addEventListener('click', toggleTheme);
+  themeToggleMobile.addEventListener('click', toggleTheme);
 }
+
+// Close and remember dismissal for the current session
+if (closeForcedNoticeBtn && forcedNotice) {
+  closeForcedNoticeBtn.addEventListener('click', () => {
+    forcedNotice.classList.add('opacity-0', 'translate-y-[-10px]');
+    setTimeout(() => {
+        forcedNotice.remove();
+    }, 300);
+    sessionStorage.setItem('forced_theme_notice_shown', 'true');
+  });
+}
+
+/* ==========================================================================
+   Interactive Browser Guidance Tabs for Theme Notice
+   ========================================================================== */
+
+const browserTabBtns = document.querySelectorAll('.browser-tab-btn');
+const instructionsContainer = document.getElementById('instructions-container');
+const browserInstructions = document.querySelectorAll('.browser-instruction');
+
+browserTabBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const targetId = btn.getAttribute('data-target');
+    const targetInstruction = document.getElementById(targetId);
+
+    if (instructionsContainer && instructionsContainer.classList.contains('hidden')) {
+      instructionsContainer.classList.remove('hidden');
+    }
+
+    browserInstructions.forEach(instruction => {
+      instruction.classList.add('hidden');
+    });
+
+    if (targetInstruction) {
+      targetInstruction.classList.remove('hidden');
+    }
+
+    browserTabBtns.forEach(b => b.classList.remove('ring-2', 'ring-zinc-400', 'dark:ring-zinc-500', 'bg-zinc-200', 'dark:bg-zinc-700'));
+    btn.classList.add('ring-2', 'ring-zinc-400', 'dark:ring-zinc-500', 'bg-zinc-200', 'dark:bg-zinc-700');
+  });
+});
 
 /* ==========================================================================
    Mobile Navigation Menu (Curtain Animation)
@@ -246,37 +297,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.reveal-scroll').forEach(element => {
         observer.observe(element);
-    });
-});
-
-/**
- * Detects Samsung Internet and shows a helpful tip if system dark mode is active,
- * guiding the user to turn off the browser's aggressive forced inversion.
- */
-document.addEventListener('DOMContentLoaded', () => {
-    const notice = document.getElementById('samsung-notice');
-    const closeBtn = document.getElementById('close-samsung-notice');
-
-    if (!notice || !closeBtn) return;
-
-    const isSamsungBrowser = /SamsungBrowser/.test(navigator.userAgent);
-    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const hasClosedNotice = sessionStorage.getItem('samsung_notice_dismissed');
-
-    // Show only if it's Samsung browser, dark mode is on, and user hasn't dismissed it yet
-    if (isSamsungBrowser && isDarkMode && !hasClosedNotice) {
-        // Small delay so it doesn't pop up instantly on page load
-        setTimeout(() => {
-            notice.classList.remove('hidden');
-        }, 1500);
-    }
-
-    // Close and remember dismissal for the current session
-    closeBtn.addEventListener('click', () => {
-        notice.classList.add('opacity-0', 'translate-y-2');
-        setTimeout(() => {
-            notice.remove();
-        }, 300);
-        sessionStorage.setItem('samsung_notice_dismissed', 'true');
     });
 });

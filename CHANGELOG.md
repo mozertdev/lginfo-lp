@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-08-26
+
+### Added
+- Integrated a universal, friendly viewing tip banner to guide users on mobile browsers when forced color inversion or dark mode adjustments might affect site aesthetics.
+- Added an interactive browser-specific guidance system (featuring step-by-step instructions for Chrome, Firefox, Safari, and Samsung Internet via clean toggle tabs).
+- Added session storage persistence for the viewing tip banner to ensure it displays at most once per visit when interacting with theme switches.
+
+### Optimized
+- Refactored the gallery section layout to a standard grid architecture, significantly enhancing layout stability and cross-compatibility with WebKit-based mobile browsers (Safari).
+- Streamlined global CSS base layers (`color-scheme` directives and rendering rules) to maximize prevention of unintended browser color shifting.
+
+---
+
 ## [1.0.3] - 2026-08-23
 
 ### Added
