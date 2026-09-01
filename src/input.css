@@ -1,9 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 @layer base {
     /* ==========================================================================
@@ -13,7 +12,7 @@
        ========================================================================== */
 
     :root {
-    /* Standard color-scheme configuration */
+        /* Standard color-scheme configuration */
         color-scheme: light dark;
     }
 
@@ -28,7 +27,8 @@
     }
 
     /* Global element protection against automated browser color shifting */
-    html, body {
+    html,
+    body {
         -webkit-text-size-adjust: 100%;
         text-size-adjust: 100%;
     }
@@ -37,40 +37,49 @@
     Disable forced color-adjust heuristics on media elements, SVGs, and pictures
     to prevent aggressive browser color inversion engines from breaking assets.
     */
-    img, video, svg, picture, canvas {
+    img,
+    video,
+    svg,
+    picture,
+    canvas {
         color-scheme: normal;
     }
 }
 
 @layer utilities {
-  /* ==========================================================================
+    /* ==========================================================================
      Scroll Reveal Animations
      ========================================================================== */
 
-  /* Initial hidden state for scroll reveal elements */
-  .reveal-scroll {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
-  }
+    /* Initial hidden state for scroll reveal elements */
+    .reveal-scroll {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+            opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+            transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: opacity, transform;
+    }
 
-  /* Active visible state for scroll reveal elements */
-  .reveal-scroll.active {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    /* Active visible state for scroll reveal elements */
+    .reveal-scroll.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
 
-  /* ==========================================================================
+    /* ==========================================================================
      Theme Transition Utilities
      ========================================================================== */
 
-  /**
+    /**
    * Smooth color and background transition for theme switching.
    * Apply this class specifically to interactive components (cards, buttons, navbars)
    * rather than the root html/body to prevent initial page-load flashing.
    */
-  .theme-transition {
-    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, color 0.3s ease-in-out;
-  }
+    .theme-transition {
+        transition:
+            background-color 0.3s ease-in-out,
+            border-color 0.3s ease-in-out,
+            color 0.3s ease-in-out;
+    }
 }

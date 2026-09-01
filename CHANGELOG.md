@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-08-31
+
+### Added
+- Integrated a dynamic hero carousel populated via `hero-carousel.json` to showcase store promotional banners.
+- Added native touch and swipe gesture support for the hero carousel on mobile devices, allowing seamless slide transitions via touch dragging.
+- Added a robust set of high-resolution computer imagery and store banner assets.
+
+### Changed
+- Migrated all legacy raster image formats (JPEG and PNG) to the modern **WebP** standard, ensuring superior compression alongside SVG vectors.
+- Refactored the dynamic gallery loader to fetch from `gallery.json` and automatically render a randomized subset of items on each page load using a Fisher-Yates shuffle.
+- Updated the dynamic testimonials loader to fetch from `testimonials.json` and display exactly 4 randomized customer reviews on every page reload.
+
+### Optimized
+- Refactored hero carousel image presentation using `object-contain` combined with responsive container height rules (`h-72 sm:h-80 md:h-96`) to ensure flawless image proportions and scaling across all viewports.
+- Streamlined hero carousel captions to remain hidden during standard automated rotation and sliding, displaying descriptive text exclusively when expanding images inside the Lightbox modal.
+- Optimized hero carousel navigation arrows by hiding them entirely on mobile screens (`hidden md:flex`) and restricting desktop display strictly to hover events (`group-hover:opacity-100`), eliminating persistent touch-state artifacts.
+
+---
+
 ## [1.1.0] - 2026-08-26
 
 ### Added
