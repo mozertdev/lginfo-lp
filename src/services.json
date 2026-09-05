@@ -1,0 +1,32 @@
+[
+  {
+    "icon": "wrench",
+    "title": "Manutenção de Hardware",
+    "description": "Troca de peças, reparo de placas, limpeza interna profissional e troca de pasta térmica de alta performance."
+  },
+  {
+    "icon": "hard-drive",
+    "title": "Upgrades (SSD e RAM)",
+    "description": "Deixe seu computador até 10x mais rápido instalando SSDs NVMe e expandindo a memória RAM."
+  },
+  {
+    "icon": "laptop",
+    "title": "Formatação & Software",
+    "description": "Instalação limpa do Windows/Linux/MacOS, remoção de vírus, backup de dados, recuperação de dados, instalação de programas e drivers."
+  },
+  {
+    "icon": "home",
+    "title": "Atendimento Residencial e Empresarial",
+    "description": "Suporte técnico especializado direto na sua casa ou empresa, solucionando problemas de rede e computadores."
+  },
+  {
+    "icon": "headphones",
+    "title": "Consultoria em Computação",
+    "description": "Orientação especializada na escolha de peças para montagem de PCs personalizados, redes e otimização de infraestrutura."
+  },
+  {
+    "icon": "shopping-bag",
+    "title": "Venda de Peças e Semi-novos",
+    "description": "Comércio de hardwares e venda de computadores e notebooks semi-novos revisados com garantia."
+  }
+]

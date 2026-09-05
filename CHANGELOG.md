@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-09-04
+
+### Added
+- Integrated a comprehensive, industry-standard SEO architecture across the document head (including structured Open Graph tags, Twitter Cards, robust meta descriptions, keywords, and canonical links).
+- Added a `site.webmanifest` file to support Progressive Web App capabilities and custom mobile installation configuration.
+- Integrated a direct link to the Google Business profile within the Contact Section to enhance local authority and map accessibility.
+
+### Changed
+- Migrated the Services Section from hardcoded markup to a dynamic layout managed via an external JSON data source. (`services.json`)
+- Migrated the Benefits Section from hardcoded markup to a dynamic layout managed via an external JSON data source (`benefits.json`).
+
+### Optimized
+- Removed `text-justify` property from Services Section description cards, eliminating awkward spacing gaps and layout stretching on mobile viewports.
+- Enhanced Contact Section layout stability on mobile devices by applying text-wrapping utilities (`break-all`) to long links like emails, preventing overflow and layout breakage.
+
+---
+
+## [1.2.1] - 2026-09-02
+
+### Added
+- Added CNAME file for custom domain `lginfo.tec.br`.
+
+___
+
 ## [1.2.0] - 2026-08-31
 
 ### Added

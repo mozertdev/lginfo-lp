@@ -318,6 +318,334 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* ==========================================================================
+Dynamic Hero Carousel Controller with Touch/Swipe Support
+========================================================================== */
+document.addEventListener("DOMContentLoaded", async () => {
+  const track = document.getElementById("hero-carousel-track");
+  const dotsContainer = document.getElementById("carousel-dots");
+  const prevBtn = document.getElementById("carousel-prev");
+  const nextBtn = document.getElementById("carousel-next");
+
+  if (!track || !dotsContainer) return;
+
+  try {
+    const response = await fetch("./src/hero-carousel.json");
+    if (!response.ok)
+      throw new Error("Erro ao carregar os dados do carrossel da hero.");
+
+    const slides = await response.json();
+    if (slides.length === 0) return;
+
+    let currentIndex = 0;
+    let autoplayTimer = null;
+    const intervalTime = 5000; // 5 segundos por slide
+
+    /**
+     * Renders the slides and dots markup without captions during standard rotation
+     */
+    const renderCarousel = () => {
+      track.innerHTML = slides
+        .map(
+          (slide, index) => `
+        <div class="absolute inset-0 transition-opacity duration-700 ease-in-out ${index === 0 ? "opacity-100 z-10" : "opacity-0 z-0"} carousel-slide" data-index="${index}">
+          <img
+            src="${slide.src}"
+            alt="${slide.alt}"
+            class="w-full h-full object-contain select-none cursor-pointer"
+          />
+        </div>
+      `,
+        )
+        .join("");
+
+      dotsContainer.innerHTML = slides
+        .map(
+          (_, index) => `
+        <button
+          aria-label="Ir para o slide ${index + 1}"
+          class="w-2.5 h-2.5 rounded-full transition-all duration-300 ${index === 0 ? "bg-blue-600 w-6" : "bg-white/50 hover:bg-white"}"
+          data-index="${index}"
+        ></button>
+      `,
+        )
+        .join("");
+    };
+
+    renderCarousel();
+
+    const slideElements = track.querySelectorAll(".carousel-slide");
+    const dotElements = dotsContainer.querySelectorAll("button");
+
+    /**
+     * Updates the active slide and resets the autoplay timer
+     * @param {number} newIndex
+     */
+    const goToSlide = (newIndex) => {
+      currentIndex = (newIndex + slides.length) % slides.length;
+
+      slideElements.forEach((slide, idx) => {
+        if (idx === currentIndex) {
+          slide.classList.remove("opacity-0", "z-0");
+          slide.classList.add("opacity-100", "z-10");
+        } else {
+          slide.classList.remove("opacity-100", "z-10");
+          slide.classList.add("opacity-0", "z-0");
+        }
+      });
+
+      dotElements.forEach((dot, idx) => {
+        if (idx === currentIndex) {
+          dot.classList.remove("bg-white/50", "w-2.5");
+          dot.classList.add("bg-blue-600", "w-6");
+        } else {
+          dot.classList.remove("bg-blue-600", "w-6");
+          dot.classList.add("bg-white/50", "w-2.5");
+        }
+      });
+    };
+
+    /**
+     * Restarts the automated timer loop (resets standard timing to 0)
+     */
+    const resetAutoplay = () => {
+      clearInterval(autoplayTimer);
+      autoplayTimer = setInterval(() => {
+        goToSlide(currentIndex + 1);
+      }, intervalTime);
+    };
+
+    // Event Listeners for manual controls
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => {
+        goToSlide(currentIndex + 1);
+        resetAutoplay();
+      });
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => {
+        goToSlide(currentIndex - 1);
+        resetAutoplay();
+      });
+    }
+
+    dotElements.forEach((dot, idx) => {
+      dot.addEventListener("click", () => {
+        goToSlide(idx);
+        resetAutoplay();
+      });
+    });
+
+    // Touch / Swipe Event Listeners for Mobile Navigation
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const minSwipeDistance = 50; // Minimum pixels required to register a swipe
+
+    track.addEventListener(
+      "touchstart",
+      (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      },
+      { passive: true },
+    );
+
+    track.addEventListener(
+      "touchend",
+      (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipeGesture();
+      },
+      { passive: true },
+    );
+
+    /**
+     * Evaluates horizontal touch distance to change slides via swipe
+     */
+    const handleSwipeGesture = () => {
+      if (touchEndX < touchStartX - minSwipeDistance) {
+        // Swipe Left -> Next Slide
+        goToSlide(currentIndex + 1);
+        resetAutoplay();
+      } else if (touchEndX > touchStartX + minSwipeDistance) {
+        // Swipe Right -> Previous Slide
+        goToSlide(currentIndex - 1);
+        resetAutoplay();
+      }
+    };
+    // Touch / Swipe Event Listeners
+
+    // Click on slide opens image in the Lightbox modal and displays description/caption
+    track.addEventListener("click", (e) => {
+      // Prevents modal from firing if gesture was an intended swipe or drag
+      if (Math.abs(touchEndX - touchStartX) > 10) return;
+
+      const activeSlideImg = slideElements[currentIndex].querySelector("img");
+      const imageModal = document.getElementById("image-modal");
+      const modalImg = document.getElementById("modal-img");
+      const modalCaption = document.getElementById("modal-caption");
+
+      if (activeSlideImg && modalImg && imageModal) {
+        modalImg.src = activeSlideImg.src;
+        modalCaption.textContent =
+          slides[currentIndex].caption ||
+          slides[currentIndex].alt ||
+          "LG Info Banner";
+        imageModal.classList.remove("hidden");
+        imageModal.classList.add("flex");
+        window.history.pushState({ modalOpen: true }, "");
+      }
+    });
+
+    // Initialize first autoplay cycle
+    resetAutoplay();
+  } catch (error) {
+    console.warn("Não foi possível carregar o carrossel da hero:", error);
+  }
+});
+
+/* ==========================================================================
+Dynamic Services Loader
+========================================================================== */
+document.addEventListener("DOMContentLoaded", async () => {
+  const servicesContainer = document.getElementById("services-grid");
+  if (!servicesContainer) return;
+  try {
+    const response = await fetch("./src/services.json");
+    if (!response.ok)
+      throw new Error("Erro ao carregar os dados dos serviços.");
+    const services = await response.json();
+
+    // Render services markup for all items present in the JSON with group hover support
+    servicesContainer.innerHTML = services
+      .map((service) => {
+        return `
+                <div class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 rounded-2xl flex flex-col justify-between transition-all duration-300 md:hover:border-blue-600 dark:md:hover:border-blue-500/40 md:hover:-translate-y-1 reveal-scroll shadow-sm dark:shadow-none">
+                    <div>
+                        <div class="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-500 mb-6 group-hover:bg-blue-600 group-hover:text-white dark:group-hover:bg-blue-500 dark:group-hover:text-white transition-all duration-300">
+                            <i data-lucide="${service.icon}" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">
+                            ${service.title}
+                        </h3>
+                        <p class="hyphens-auto text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                            ${service.description}
+                        </p>
+                    </div>
+                </div>
+                `;
+      })
+      .join("");
+
+    // Re-initialize Lucide icons for dynamically added elements
+    if (typeof lucide !== "undefined") {
+      lucide.createIcons();
+    }
+
+    // Re-observe elements for Scroll Reveal
+    initDynamicServicesObserver();
+  } catch (error) {
+    console.warn("Não foi possível carregar os serviços dinâmicos:", error);
+  }
+});
+
+/**
+ * Re-initializes the IntersectionObserver for dynamically injected service elements
+ */
+function initDynamicServicesObserver() {
+  const observerOptions = {
+    root: null,
+    rootMargin: "0px 0px -10% 0px",
+    threshold: 0.15,
+  };
+
+  const revealCallback = (entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("active");
+        observer.unobserve(entry.target);
+      }
+    });
+  };
+
+  const observer = new IntersectionObserver(revealCallback, observerOptions);
+  document
+    .querySelectorAll("#services-grid .reveal-scroll")
+    .forEach((element) => {
+      observer.observe(element);
+    });
+}
+
+/* ==========================================================================
+Dynamic Benefits Loader
+========================================================================== */
+document.addEventListener("DOMContentLoaded", async () => {
+  const benefitsContainer = document.getElementById("benefits-grid");
+  if (!benefitsContainer) return;
+  try {
+    const response = await fetch("./src/benefits.json");
+    if (!response.ok)
+      throw new Error("Erro ao carregar os dados dos benefícios.");
+    const benefits = await response.json();
+
+    // Render benefits markup for all items present in the JSON with group hover support
+    benefitsContainer.innerHTML = benefits
+      .map((benefit) => {
+        return `
+                <div class="group flex items-start space-x-4 bg-white dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-200 dark:border-slate-800/80 transition-all duration-300 md:hover:border-blue-600 dark:md:hover:border-blue-500/50 md:hover:translate-x-1 reveal-scroll shadow-sm dark:shadow-none">
+                    <div class="flex-shrink-0 mt-0.5 text-blue-600 dark:text-blue-500 transition-all duration-300 group-hover:scale-110">
+                        <i data-lucide="${benefit.icon}" class="w-6 h-6"></i>
+                    </div>
+                    <p class="hyphens-auto text-sm sm:text-base leading-relaxed">
+                        <span class="text-blue-600 dark:text-blue-400 font-semibold">
+                            ${benefit.boldTitle}
+                        </span>
+                        ${benefit.description}
+                    </p>
+                </div>
+                `;
+      })
+      .join("");
+
+    // Re-initialize Lucide icons for dynamically added elements
+    if (typeof lucide !== "undefined") {
+      lucide.createIcons();
+    }
+
+    // Re-observe elements for Scroll Reveal
+    initDynamicBenefitsObserver();
+  } catch (error) {
+    console.warn("Não foi possível carregar os benefícios dinâmicos:", error);
+  }
+});
+
+/**
+ * Re-initializes the IntersectionObserver for dynamically injected benefit elements
+ */
+function initDynamicBenefitsObserver() {
+  const observerOptions = {
+    root: null,
+    rootMargin: "0px 0px -10% 0px",
+    threshold: 0.15,
+  };
+
+  const revealCallback = (entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("active");
+        observer.unobserve(entry.target);
+      }
+    });
+  };
+
+  const observer = new IntersectionObserver(revealCallback, observerOptions);
+  document
+    .querySelectorAll("#benefits-grid .reveal-scroll")
+    .forEach((element) => {
+      observer.observe(element);
+    });
+}
+
+/* ==========================================================================
 Dynamic Gallery Loader & Randomizer
 ========================================================================== */
 document.addEventListener("DOMContentLoaded", async () => {
@@ -504,189 +832,3 @@ function initDynamicTestimonialsObserver() {
       observer.observe(element);
     });
 }
-
-/* ==========================================================================
-Dynamic Hero Carousel Controller with Touch/Swipe Support
-========================================================================== */
-document.addEventListener("DOMContentLoaded", async () => {
-  const track = document.getElementById("hero-carousel-track");
-  const dotsContainer = document.getElementById("carousel-dots");
-  const prevBtn = document.getElementById("carousel-prev");
-  const nextBtn = document.getElementById("carousel-next");
-
-  if (!track || !dotsContainer) return;
-
-  try {
-    const response = await fetch("./src/hero-carousel.json");
-    if (!response.ok)
-      throw new Error("Erro ao carregar os dados do carrossel da hero.");
-
-    const slides = await response.json();
-    if (slides.length === 0) return;
-
-    let currentIndex = 0;
-    let autoplayTimer = null;
-    const intervalTime = 5000; // 5 segundos por slide
-
-    /**
-     * Renders the slides and dots markup without captions during standard rotation
-     */
-    const renderCarousel = () => {
-      track.innerHTML = slides
-        .map(
-          (slide, index) => `
-        <div class="absolute inset-0 transition-opacity duration-700 ease-in-out ${index === 0 ? "opacity-100 z-10" : "opacity-0 z-0"} carousel-slide" data-index="${index}">
-          <img
-            src="${slide.src}"
-            alt="${slide.alt}"
-            class="w-full h-full object-contain select-none cursor-pointer"
-          />
-        </div>
-      `,
-        )
-        .join("");
-
-      dotsContainer.innerHTML = slides
-        .map(
-          (_, index) => `
-        <button
-          aria-label="Ir para o slide ${index + 1}"
-          class="w-2.5 h-2.5 rounded-full transition-all duration-300 ${index === 0 ? "bg-blue-600 w-6" : "bg-white/50 hover:bg-white"}"
-          data-index="${index}"
-        ></button>
-      `,
-        )
-        .join("");
-    };
-
-    renderCarousel();
-
-    const slideElements = track.querySelectorAll(".carousel-slide");
-    const dotElements = dotsContainer.querySelectorAll("button");
-
-    /**
-     * Updates the active slide and resets the autoplay timer
-     * @param {number} newIndex
-     */
-    const goToSlide = (newIndex) => {
-      currentIndex = (newIndex + slides.length) % slides.length;
-
-      slideElements.forEach((slide, idx) => {
-        if (idx === currentIndex) {
-          slide.classList.remove("opacity-0", "z-0");
-          slide.classList.add("opacity-100", "z-10");
-        } else {
-          slide.classList.remove("opacity-100", "z-10");
-          slide.classList.add("opacity-0", "z-0");
-        }
-      });
-
-      dotElements.forEach((dot, idx) => {
-        if (idx === currentIndex) {
-          dot.classList.remove("bg-white/50", "w-2.5");
-          dot.classList.add("bg-blue-600", "w-6");
-        } else {
-          dot.classList.remove("bg-blue-600", "w-6");
-          dot.classList.add("bg-white/50", "w-2.5");
-        }
-      });
-    };
-
-    /**
-     * Restarts the automated timer loop (resets standard timing to 0)
-     */
-    const resetAutoplay = () => {
-      clearInterval(autoplayTimer);
-      autoplayTimer = setInterval(() => {
-        goToSlide(currentIndex + 1);
-      }, intervalTime);
-    };
-
-    // Event Listeners for manual controls
-    if (nextBtn) {
-      nextBtn.addEventListener("click", () => {
-        goToSlide(currentIndex + 1);
-        resetAutoplay();
-      });
-    }
-
-    if (prevBtn) {
-      prevBtn.addEventListener("click", () => {
-        goToSlide(currentIndex - 1);
-        resetAutoplay();
-      });
-    }
-
-    dotElements.forEach((dot, idx) => {
-      dot.addEventListener("click", () => {
-        goToSlide(idx);
-        resetAutoplay();
-      });
-    });
-
-    // BEGIN: Touch / Swipe Event Listeners for Mobile Navigation
-    let touchStartX = 0;
-    let touchEndX = 0;
-    const minSwipeDistance = 50; // Minimum pixels required to register a swipe
-
-    track.addEventListener(
-      "touchstart",
-      (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-      },
-      { passive: true },
-    );
-
-    track.addEventListener(
-      "touchend",
-      (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipeGesture();
-      },
-      { passive: true },
-    );
-
-    /**
-     * Evaluates horizontal touch distance to change slides via swipe
-     */
-    const handleSwipeGesture = () => {
-      if (touchEndX < touchStartX - minSwipeDistance) {
-        // Swipe Left -> Next Slide
-        goToSlide(currentIndex + 1);
-        resetAutoplay();
-      } else if (touchEndX > touchStartX + minSwipeDistance) {
-        // Swipe Right -> Previous Slide
-        goToSlide(currentIndex - 1);
-        resetAutoplay();
-      }
-    };
-    // END: Touch / Swipe Event Listeners
-
-    // Click on slide opens image in the Lightbox modal and displays description/caption
-    track.addEventListener("click", (e) => {
-      // Prevents modal from firing if gesture was an intended swipe or drag
-      if (Math.abs(touchEndX - touchStartX) > 10) return;
-
-      const activeSlideImg = slideElements[currentIndex].querySelector("img");
-      const imageModal = document.getElementById("image-modal");
-      const modalImg = document.getElementById("modal-img");
-      const modalCaption = document.getElementById("modal-caption");
-
-      if (activeSlideImg && modalImg && imageModal) {
-        modalImg.src = activeSlideImg.src;
-        modalCaption.textContent =
-          slides[currentIndex].caption ||
-          slides[currentIndex].alt ||
-          "LG Info Banner";
-        imageModal.classList.remove("hidden");
-        imageModal.classList.add("flex");
-        window.history.pushState({ modalOpen: true }, "");
-      }
-    });
-
-    // Initialize first autoplay cycle
-    resetAutoplay();
-  } catch (error) {
-    console.warn("Não foi possível carregar o carrossel da hero:", error);
-  }
-});

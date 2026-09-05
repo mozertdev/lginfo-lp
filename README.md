@@ -2,6 +2,8 @@
 
 A modern, fast, and fully responsive landing page built for **LG Manutenção & Informática**, a professional computer repair and IT technical support business based in Sobradinho, Brasília - DF, Brazil.
 
+🔗 **Live Website:** [https://lginfo.tec.br](https://lginfo.tec.br)
+
 ---
 
 ## Features
